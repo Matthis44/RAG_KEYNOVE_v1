@@ -142,23 +142,6 @@ response.print_sources()
 
 ---
 
-## Hiérarchie légale
-
-Les documents sont pondérés selon leur rang dans la hiérarchie des normes :
-
-| Priorité | Type |
-|----------|------|
-| 1 | Loi |
-| 2 | Code |
-| 3 | Décret |
-| 4 | Arrêté |
-| 6 | Avenant / Décision |
-| 7 | Circulaire |
-| 8 | Charte |
-| 9 | Avis |
-
----
-
 ## Documents sources
 
 Le corpus initial couvre :
@@ -176,3 +159,13 @@ Ajoutez vos propres PDFs dans `data/RAW/` et référencez-les dans `data/documen
 - Version : v1
 - Corpus : 4 documents, 743 chunks
 - Stack : Python 3.12, Mistral AI, uv
+
+---
+
+## Conclusion et limites de la v1
+
+Cette première version valide la faisabilité d'un RAG sur les textes réglementaires infirmiers. Cependant, après expérimentation, une limite structurelle est apparue : **la recherche de chunks de texte seule ne suffit pas** pour répondre correctement aux scénarios de cotation complexes.
+
+Le LLM a du mal à appliquer correctement les règles de cumul spécifiques au contexte clinique — notamment les majorations liées au premier jour de prise en charge, à la distance, à l'âge du patient (enfant), ou aux actes réalisés en même temps. Ces règles sont éparpillées dans les documents et leur application dépend de combinaisons de conditions que le modèle ne parvient pas à raisonner de façon fiable à partir de chunks de texte brut.
+
+**La prochaine étape** consiste à repenser l'architecture pour structurer explicitement les règles métier et les cotations : plutôt que de laisser le LLM inférer les règles depuis des extraits de texte, lui fournir une représentation structurée (règles, conditions, actes, majorations) qu'il peut interroger et appliquer de manière déterministe.
